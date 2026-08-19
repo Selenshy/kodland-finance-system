@@ -32,7 +32,9 @@ backend/          FastAPI app, Alembic migrations, seed script, pytest suite
   scripts/seed.py   Demo data: 3 legal entities, 3 currencies, ~60 journal entries
   tests/            pytest, in-memory SQLite — never touches the real database
 api/index.py       Vercel Python function entrypoint (imports backend/app/main:app)
-requirements.txt   Points Vercel's Python builder at backend/requirements.txt
+requirements.txt   Flat copy of backend/requirements.txt for Vercel's Python builder
+                   (Vercel's parser doesn't support "-r" includes, so this can't
+                   just point at the backend's copy -- keep both in sync manually)
 src/               Next.js app (App Router), at the repo root so Vercel's
                    zero-config Next.js detection picks it up directly
 vercel.json        Function config + daily FX-refresh cron job

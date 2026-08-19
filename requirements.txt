@@ -1,5 +1,20 @@
 # Read by Vercel's Python runtime when building api/index.py.
-# The actual dependency list lives in backend/requirements.txt (the
-# backend is developed/tested as its own standalone project); this file
-# just points Vercel at it so there's a single source of truth.
--r backend/requirements.txt
+# Vercel's requirements.txt parser does not support "-r" includes, so
+# this must be a flat, self-contained list -- kept in sync manually with
+# backend/requirements.txt (the source of truth for the standalone
+# backend project's own venv/tests).
+fastapi>=0.115.6
+uvicorn[standard]>=0.32.1
+sqlalchemy>=2.0.36
+alembic>=1.14.0
+psycopg[binary]>=3.2.10
+pydantic[email]>=2.10.3
+pydantic-settings>=2.7.0
+python-jose[cryptography]>=3.3.0
+bcrypt>=4.2.0
+python-multipart>=0.0.19
+openpyxl>=3.1.5
+reportlab>=4.2.5
+httpx>=0.28.1
+python-dateutil>=2.9.0.post0
+tenacity>=9.0.0
