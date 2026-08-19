@@ -40,7 +40,7 @@ export default function ImportPage() {
       setUpload(res);
       setStep("map");
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Upload failed"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Upload failed"),
   });
 
   const validateMutation = useMutation({
@@ -53,7 +53,7 @@ export default function ImportPage() {
       setValidation(res);
       setStep("validate");
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Validation failed"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Validation failed"),
   });
 
   const commitMutation = useMutation({
@@ -67,7 +67,7 @@ export default function ImportPage() {
       setStep("commit");
       queryClient.invalidateQueries({ queryKey: ["journal-entries", currentEntityId] });
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Commit failed"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Commit failed"),
   });
 
   const saveTemplateMutation = useMutation({

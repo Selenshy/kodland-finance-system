@@ -78,7 +78,7 @@ export function JournalEntryModal({
       queryClient.invalidateQueries({ queryKey: ["journal-entries", entityId] });
       onClose();
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Failed to save entry"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Failed to save entry"),
   });
 
   const updateLine = (i: number, patch: Partial<LineForm>) => {

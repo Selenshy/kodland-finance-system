@@ -30,7 +30,7 @@ export default function FxRatesAdminPage() {
       queryClient.invalidateQueries({ queryKey: ["fx-rates"] });
       setRate("");
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Failed to save rate"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Failed to save rate"),
   });
 
   return (

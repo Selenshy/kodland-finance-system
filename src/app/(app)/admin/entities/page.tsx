@@ -31,7 +31,7 @@ export default function EntitiesAdminPage() {
       setName("");
       setCountry("");
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Failed to create"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Failed to create"),
   });
 
   return (

@@ -1,11 +1,21 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
+function stringifyDetail(detail: unknown): string {
+  if (typeof detail === "string") return detail;
+  if (detail === null || detail === undefined) return "Request failed";
+  try {
+    return JSON.stringify(detail);
+  } catch {
+    return String(detail);
+  }
+}
+
 export class ApiError extends Error {
   status: number;
   detail: unknown;
 
   constructor(status: number, detail: unknown) {
-    super(typeof detail === "string" ? detail : JSON.stringify(detail));
+    super(stringifyDetail(detail));
     this.status = status;
     this.detail = detail;
   }
@@ -67,11 +77,29 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
 
   if (res.status === 204) return undefined as T;
 
-  const isJson = res.headers.get("content-type")?.includes("application/json");
-  const data = isJson ? await res.json() : await res.blob();
+  // Error bodies aren't always JSON: a crash before FastAPI's handlers run
+  // (e.g. a bad DATABASE_URL) surfaces as Starlette's plain-text 500, and
+  // infra-level failures (bad gateway, function crash) can come back as
+  // HTML. Read as text and only parse as JSON when it looks like JSON, so
+  // a non-JSON error still renders as readable text instead of "[object
+  // Blob]"/"[object Object]".
+  const contentType = res.headers.get("content-type") || "";
+  const rawText = await res.text();
+  let data: unknown = rawText;
+  if (contentType.includes("application/json") && rawText) {
+    try {
+      data = JSON.parse(rawText);
+    } catch {
+      data = rawText;
+    }
+  }
 
   if (!res.ok) {
-    throw new ApiError(res.status, isJson ? (data as { detail?: unknown }).detail ?? data : data);
+    const detail =
+      data && typeof data === "object" && "detail" in (data as Record<string, unknown>)
+        ? (data as { detail?: unknown }).detail
+        : data || res.statusText || `Request failed with status ${res.status}`;
+    throw new ApiError(res.status, detail);
   }
   return data as T;
 }

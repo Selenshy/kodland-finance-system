@@ -40,7 +40,7 @@ export default function OpeningBalancesPage() {
       queryClient.invalidateQueries({ queryKey: ["opening-balances", currentEntityId] });
       setAccountId(""); setLocalAmount(""); setUsdAmount("");
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Failed to save"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Failed to save"),
   });
 
   const deleteMutation = useMutation({

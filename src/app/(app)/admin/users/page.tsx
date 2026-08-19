@@ -30,7 +30,7 @@ export default function UsersAdminPage() {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       setEmail(""); setPassword(""); setFullName(""); setEntityIds([]);
     },
-    onError: (err) => setError(err instanceof ApiError ? String(err.detail) : "Failed to create user"),
+    onError: (err) => setError(err instanceof ApiError ? err.message : "Failed to create user"),
   });
 
   const toggleActiveMutation = useMutation({
