@@ -9,6 +9,7 @@ import { EntityProvider, useEntities } from "@/lib/entity-context";
 const NAV = [
   { href: "/", label: "Dashboard" },
   { href: "/accounts", label: "Chart of Accounts" },
+  { href: "/opening-balances", label: "Opening Balances" },
   { href: "/journal", label: "Journal" },
   { href: "/import", label: "Import" },
   { href: "/reports", label: "Reports" },
