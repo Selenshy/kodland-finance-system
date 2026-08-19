@@ -1,0 +1,5 @@
+# Read by Vercel's Python runtime when building api/index.py.
+# The actual dependency list lives in backend/requirements.txt (the
+# backend is developed/tested as its own standalone project); this file
+# just points Vercel at it so there's a single source of truth.
+-r backend/requirements.txt

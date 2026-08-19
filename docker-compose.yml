@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kodland
+      POSTGRES_PASSWORD: kodland
+      POSTGRES_DB: kodland_finance
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kodland"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://kodland:kodland@db:5432/kodland_finance
+      JWT_SECRET: local-dev-secret-change-me
+      FX_CRON_SECRET: local-dev-cron-secret
+      CORS_ORIGINS: "http://localhost:3000"
+    ports:
+      - "8000:8000"
+
+volumes:
+  db_data:
