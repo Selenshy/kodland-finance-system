@@ -52,12 +52,10 @@ custom "Root Directory" setting is needed in the Vercel dashboard.
 docker compose up --build
 ```
 
-This starts a local Postgres and the FastAPI backend on `:8000`, running
-migrations automatically on container start. Seed demo data once the stack is up:
-
-```bash
-docker compose exec backend python scripts/seed.py
-```
+This starts a local Postgres and the FastAPI backend on `:8000` from
+scratch: migrations and the demo-data seed both run automatically on
+container start (`scripts/seed.py` is idempotent — it's a no-op on later
+restarts once the demo tenant already exists).
 
 ### Backend (without Docker)
 
